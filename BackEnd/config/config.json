@@ -1,0 +1,14 @@
+{
+  "development": {
+    "dialect": "sqlite",
+    "storage": "petly-dev.db"
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": "petly-test.db"
+  },
+  "production": {
+    "dialect": "sqlite",
+    "storage": "petly-prod.db"
+  }
+}
