@@ -16,7 +16,7 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.get("/", (req, res) => {
   res.json({
-    message: "API Petly funfando",
+    message: "Sistema funfando",
   });
 });
 
@@ -27,6 +27,13 @@ app.use("/admin", adminRoutes);
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+sequelize
+  .sync()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Erro ao sincronizar o BD:", error);
+  });

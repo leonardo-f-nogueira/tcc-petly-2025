@@ -26,7 +26,9 @@ export default function SideBar({ activeView, onChangeView, forceImage }) {
   ];
 
   return (
-    <aside className="w-24 bg-black text-white flex flex-col items-center py-8 gap-10 h-full relative shadow-xl z-10">
+    <aside
+      className="fixed top-0 left-0 w-24 h-screen bg-black text-white flex flex-col items-center py-8 gap-10 shadow-xl z-10"
+    >
       <div
         onClick={() => onChangeView("perfil")}
         className="w-14 h-14 rounded-full bg-white flex items-center justify-center cursor-pointer shadow-md overflow-hidden border-2 border-transparent hover:border-green-500 transition-all group"

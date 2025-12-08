@@ -5,10 +5,12 @@ const router = express.Router();
 const AuthController = require("../controllers/AuthController");
 const { verifyToken } = require("../middleware/authMiddleware");
 
-router.post("/abrigo/cadastro", AuthController.cadastroAbrigo);
 router.post("/usuario/cadastro", AuthController.cadastroUsuario);
-router.post("/abrigo/login", AuthController.loginAbrigo);
+router.post("/abrigo/cadastro", AuthController.cadastroAbrigo);
+
 router.post("/usuario/login", AuthController.loginUsuario);
+router.post("/abrigo/login", AuthController.loginAbrigo);
+
 router.put("/usuario", verifyToken, AuthController.atualizarUsuario);
 router.put("/abrigo", verifyToken, AuthController.atualizarAbrigo);
 

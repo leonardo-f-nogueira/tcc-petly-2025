@@ -1,7 +1,7 @@
 // Página principal do site
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { CgSpinner, CgArrowRight } from "react-icons/cg";
+import { CgSpinner, CgGlobeAlt, CgArrowRight } from "react-icons/cg";
 import api from "../services/api";
 
 import Header from "../components/header/headerPrincipal.jsx";
@@ -75,11 +75,11 @@ export default function App() {
                 </p>
               </div>
             ) : (
-              <div className="flex overflow-x-auto gap-6 pb-8 snap-x scrollbar-thin scrollbar-thumb-green-200 scrollbar-track-transparent">
+               <div className="flex overflow-x-auto gap-6 pb-8 snap-x scrollbar-thin scrollbar-thumb-green-200 scrollbar-track-transparent">
                 {pets.slice(0, 6).map((pet) => (
                   <div
                     key={pet.id}
-                    className="min-w-[280px] md:min-w-[320px] bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition snap-center flex flex-col"
+                    className="min-w-[280px] md:min-w-[320px] bg-white border-2 border-gray-300 rounded-xl overflow-hidden hover:shadow-md transition snap-center flex flex-col"
                   >
                     <div className="h-48 w-full bg-gray-200 relative">
                       <img
@@ -94,7 +94,7 @@ export default function App() {
                           e.target.src = "/imgs/placeholder-pet.jpg";
                         }}
                       />
-                      <span className="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                      <span className="absolute top-5 right-5 bg-green-600 text-white text-xs font-normal px-3 py-1 rounded-full">
                         Disponível
                       </span>
                     </div>
@@ -107,7 +107,7 @@ export default function App() {
                         {pet.species} • {pet.size}
                       </p>
                       <p className="text-xs text-gray-400 mb-4">
-                        📍 {pet.abrigo?.address || "Localização não informada"}
+                        <CgGlobeAlt className="inline mr-1" /> {pet.abrigo?.address || "Localização não informada"}
                       </p>
 
                       <Link to="/login/usuario" className="mt-auto">

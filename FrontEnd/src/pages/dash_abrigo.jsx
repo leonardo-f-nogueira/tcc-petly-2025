@@ -40,22 +40,18 @@ export default function DashAbrigo() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-[#F7F8FC] flex flex-col">
-      <div className="flex flex-1 relative">
-        <div className="sticky top-0 h-full z-20">
-          <SideBar
-            activeView={activeView}
-            onChangeView={setActiveView}
-            forceImage={sidebarImage}
-          />
-        </div>
+    <main className="w-full min-h-screen bg-[#F7F8FC] flex">
+      <SideBar
+        activeView={activeView}
+        onChangeView={setActiveView}
+        forceImage={sidebarImage}
+      />
 
-        <section className="flex-1 overflow-y-auto p-4 md:p-8 lg:p-10">
-          <div className="bg-white rounded-3xl shadow-sm min-h-full p-8 border border-gray-100">
-            {renderContent()}
-          </div>
-        </section>
-      </div>
+      <section className="flex-1 ml-24 p-4 md:p-8 lg:p-10 overflow-y-auto">
+        <div className="bg-white rounded-3xl shadow-sm min-h-full p-8 border border-gray-100">
+          {renderContent()}
+        </div>
+      </section>
     </main>
   );
 }

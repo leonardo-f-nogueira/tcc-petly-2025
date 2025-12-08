@@ -3,7 +3,7 @@
 import "../Index.css";
 import Header from "../components/header/header_aposLogin.jsx";
 import Footer from "../components/Footer.jsx";
-import { CgChevronLeftO, CgGlobeAlt, CgPhone } from "react-icons/cg";
+import { CgChevronLeftO, CgPhone } from "react-icons/cg";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/useAuth.js";
@@ -121,15 +121,15 @@ export default function DetalhesAnimal() {
     );
   }
 
-  const {
-    name = "",
-    info = "",
-    image = "",
-    responsavel = "",
-    localizacao = "",
-    telefone = "",
-  } = petData;
-  const imageUrl = image || petData.photoUrl;
+  const name = petData.name || "";
+  const info = petData.description || petData.info || "";
+  const imageUrl = petData.photoUrl || petData.image || "";
+  
+  const age = petData.age || "Idade não informada";
+  const gender = petData.gender || "Sexo não informado";
+
+  const responsavel = petData.abrigo?.name || petData.responsavel || "ONG Responsável";
+  const telefone = petData.abrigo?.phone || petData.telefone || "Telefone não informado";
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -171,6 +171,16 @@ export default function DetalhesAnimal() {
               <h2 className="text-3xl font-extrabold text-gray-900 break-words">
                 {name || "Sem Nome"}
               </h2>
+
+              <div className="flex gap-2 my-2">
+                <span className="bg-green-100 text-green-800 text-sm font-bold px-3 py-1 rounded-full">
+                  {age}
+                </span>
+                <span className="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full">
+                  {gender}
+                </span>
+              </div>
+
               <p className="text-lg text-gray-600 leading-relaxed">
                 {info || "Sem informações adicionais."}
               </p>
@@ -184,21 +194,15 @@ export default function DetalhesAnimal() {
                   Responsável
                 </p>
                 <p className="text-gray-700 font-medium text-lg">
-                  {responsavel || "ONG Responsável"}
+                  {responsavel}
                 </p>
               </div>
 
               <div className="space-y-3 text-base text-gray-600">
-                <div className="flex items-start gap-3">
-                  <CgGlobeAlt className="text-green-600 text-xl flex-shrink-0 mt-1" />
-                  <span className="text-gray-800 break-words">
-                    {localizacao || "Localização não informada"}
-                  </span>
-                </div>
                 <div className="flex items-center gap-3">
                   <CgPhone className="text-green-600 text-xl flex-shrink-0" />
                   <span className="text-gray-800 font-medium">
-                    {telefone || "Telefone não informado"}
+                    {telefone}
                   </span>
                 </div>
               </div>
