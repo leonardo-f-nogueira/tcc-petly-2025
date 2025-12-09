@@ -80,7 +80,7 @@ export default function LoginAbrigo() {
             <button
               onClick={() => handleTipoChange("Adotante")}
               className={`
-                px-6 py-3 border
+                cursor-pointer px-6 py-3 border
                 ${
                   tipo === "Adotante"
                     ? "bg-green-600 text-white border-green-600"
@@ -94,7 +94,7 @@ export default function LoginAbrigo() {
             <button
               onClick={() => handleTipoChange("Abrigo")}
               className={`
-                px-6 py-3 border
+                cursor-pointer px-6 py-3 border
                 ${
                   tipo === "Abrigo"
                     ? "bg-green-600 text-white border-green-600"

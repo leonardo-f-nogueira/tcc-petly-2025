@@ -8,6 +8,24 @@ export default function List({ setActiveView, setPetToEdit }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isConfirm, setIsConfirm] = useState(false);
+  const [confirmCallback, setConfirmCallback] = useState(() => {});
+
+  function openAlert(message) {
+    setAlertMessage(message);
+    setIsConfirm(false);
+    setShowAlert(true);
+  }
+
+  function openConfirm(message, onYes) {
+    setAlertMessage(message);
+    setConfirmCallback(() => onYes);
+    setIsConfirm(true);
+    setShowAlert(true);
+  }
+
   useEffect(() => {
     async function fetchMeusPets() {
       try {
@@ -25,19 +43,21 @@ export default function List({ setActiveView, setPetToEdit }) {
   }, []);
 
   async function handleDelete(id) {
-    if (!window.confirm("Tem certeza que deseja excluir este pet?")) return;
+    openConfirm("Tem certeza que deseja excluir este pet?", async () => {
+      setShowAlert(false);
 
-    try {
-      setLoading(true);
-      await api.delete(`/animais/${id}`);
-      setPets(pets.filter((pet) => pet.id !== id));
-      alert("Pet excluído com sucesso!");
-    } catch (err) {
-      console.error("Erro ao excluir pet:", err);
-      alert("Erro ao excluir o pet. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
+      try {
+        setLoading(true);
+        await api.delete(`/animais/${id}`);
+        setPets(pets.filter((pet) => pet.id !== id));
+        openAlert("Pet excluído com sucesso!");
+      } catch (err) {
+        console.error("Erro ao excluir pet:", err);
+        openAlert("Erro ao excluir o pet. Tente novamente.");
+      } finally {
+        setLoading(false);
+      }
+    });
   }
 
   const handleEdit = (pet) => {
@@ -77,7 +97,7 @@ export default function List({ setActiveView, setPetToEdit }) {
         <h1 className="text-3xl font-bold text-gray-800">Meus Pets</h1>
         <button
           onClick={handleNew}
-          className="bg-green-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-green-700 transition flex items-center gap-2"
+          className="bg-green-600 cursor-pointer text-white px-6 py-3 rounded-xl font-medium hover:bg-green-700 transition flex items-center gap-2"
         >
           + Novo Pet
         </button>
@@ -132,13 +152,13 @@ export default function List({ setActiveView, setPetToEdit }) {
                 <div className="flex gap-3">
                   <button
                     onClick={() => handleEdit(pet)}
-                    className="flex-1 flex items-center justify-center gap-2 bg-blue-50 text-blue-600 py-2 rounded-lg font-medium hover:bg-blue-100 transition"
+                    className="flex-1 cursor-pointer flex items-center justify-center gap-2 bg-blue-50 text-blue-600 py-2 rounded-lg font-medium hover:bg-blue-100 transition"
                   >
                     <CgPen /> Editar
                   </button>
                   <button
                     onClick={() => handleDelete(pet.id)}
-                    className="flex-1 flex items-center justify-center gap-2 bg-red-50 text-red-600 py-2 rounded-lg font-medium hover:bg-red-100 transition"
+                    className="flex-1 cursor-pointer flex items-center justify-center gap-2 bg-red-50 text-red-600 py-2 rounded-lg font-medium hover:bg-red-100 transition"
                   >
                     <CgTrash /> Excluir
                   </button>
@@ -146,6 +166,51 @@ export default function List({ setActiveView, setPetToEdit }) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {showAlert && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white w-[300px] px-6 py-6 rounded-xl shadow-xl text-center">
+            <h2
+              className={`text-lg font-bold ${
+                isConfirm ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {isConfirm ? "Confirmar ação" : "Atenção"}
+            </h2>
+
+            <p className="mt-3 text-gray-700">{alertMessage}</p>
+
+            <div className="mt-6 flex gap-3">
+              {isConfirm ? (
+                <>
+                  <button
+                    onClick={() => setShowAlert(false)}
+                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowAlert(false);
+                      confirmCallback();
+                    }}
+                    className="flex-1 cursor-pointer bg-red-600 text-white px-4 py-2 rounded-lg"
+                  >
+                    Confirmar
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => setShowAlert(false)}
+                  className="w-full cursor-pointer bg-red-600 text-white px-4 py-2 rounded-lg"
+                >
+                  OK
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </section>

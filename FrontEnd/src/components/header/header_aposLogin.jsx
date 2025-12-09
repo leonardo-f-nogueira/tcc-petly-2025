@@ -104,7 +104,7 @@ export default function HeaderLogin() {
                 <button
                   onClick={() => setShowModal(false)}
                   className="
-                    bg-gray-400 text-white
+                    cursor-pointer bg-gray-400 text-white
                     px-6 py-2 rounded-lg
                     font-medium
                     text-sm sm:text-base
@@ -119,7 +119,7 @@ export default function HeaderLogin() {
                 <button
                   onClick={handleConfirmLogout}
                   className="
-                    bg-[#CA2020] text-white
+                    cursor-pointer bg-[#CA2020] text-white
                     px-6 py-2 rounded-lg
                     font-medium
                     text-sm sm:text-base

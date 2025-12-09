@@ -75,7 +75,7 @@ export default function App() {
                 </p>
               </div>
             ) : (
-               <div className="flex overflow-x-auto gap-6 pb-8 snap-x scrollbar-thin scrollbar-thumb-green-200 scrollbar-track-transparent">
+               <div className="cursor-pointer flex overflow-x-auto gap-6 pb-8 snap-x scrollbar-thin scrollbar-thumb-green-200 scrollbar-track-transparent">
                 {pets.slice(0, 6).map((pet) => (
                   <div
                     key={pet.id}
@@ -111,7 +111,7 @@ export default function App() {
                       </p>
 
                       <Link to="/login/usuario" className="mt-auto">
-                        <button className="w-full py-2 bg-green-50 text-green-700 font-bold rounded-lg hover:bg-green-100 transition">
+                        <button className="cursor-pointer w-full py-2 bg-green-50 text-green-700 font-bold rounded-lg hover:bg-green-100 transition">
                           Quero Adotar
                         </button>
                       </Link>

@@ -1,5 +1,3 @@
-// Formulário para cadastrar ou editar um animal.
-
 import { useState, useEffect } from "react";
 import { CgSpinner } from "react-icons/cg";
 import api from "../../services/api";
@@ -21,6 +19,10 @@ export default function Edit({ petToEdit, setActiveView }) {
     description: petToEdit?.description || "",
     photoUrl: petToEdit?.photoUrl || "",
   });
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [onConfirm, setOnConfirm] = useState(() => {});
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -45,7 +47,11 @@ export default function Edit({ petToEdit, setActiveView }) {
     e.preventDefault();
 
     if (!formData.name || !formData.species || !formData.photoUrl) {
-      alert("Por favor, preencha os campos obrigatórios e adicione uma foto.");
+      setAlertMessage(
+        "Por favor, preencha os campos obrigatórios e adicione uma foto."
+      );
+      setOnConfirm(() => () => setShowAlert(false));
+      setShowAlert(true);
       return;
     }
 
@@ -54,20 +60,21 @@ export default function Edit({ petToEdit, setActiveView }) {
 
       if (isEditing) {
         await api.put(`/animais/${petToEdit.id}`, formData);
-        alert("Pet atualizado com sucesso!");
+        setAlertMessage("Pet atualizado com sucesso!");
       } else {
         await api.post("/animais", formData);
-        alert("Pet cadastrado com sucesso!");
+        setAlertMessage("Pet cadastrado com sucesso!");
       }
 
-      setActiveView("meus-pets");
+      setOnConfirm(() => () => setActiveView("meus-pets"));
+      setShowAlert(true);
     } catch (error) {
-      console.error("Erro ao salvar pet:", error);
       let msg = "Erro ao salvar o pet. Tente novamente.";
-      if (error.response && error.response.data && error.response.data.erro) {
-        msg = error.response.data.erro;
-      }
-      alert(msg);
+      if (error.response?.data?.erro) msg = error.response.data.erro;
+
+      setAlertMessage(msg);
+      setOnConfirm(() => () => setShowAlert(false));
+      setShowAlert(true);
     } finally {
       setLoading(false);
     }
@@ -227,14 +234,14 @@ export default function Edit({ petToEdit, setActiveView }) {
           <button
             type="button"
             onClick={() => setActiveView("meus-pets")}
-            className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition"
+            className="flex-1 cursor-pointer py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 py-3 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition flex items-center justify-center gap-2 disabled:opacity-70"
+            className="flex-1 cursor-pointer py-3 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 transition flex items-center justify-center gap-2 disabled:opacity-70"
           >
             {loading ? (
               <CgSpinner className="animate-spin text-xl" />
@@ -246,6 +253,49 @@ export default function Edit({ petToEdit, setActiveView }) {
           </button>
         </div>
       </form>
+
+      {showAlert && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white w-[300px] px-6 py-6 rounded-xl shadow-xl text-center animate-fade-in">
+            <h2
+              className={`text-xl font-bold ${
+                alertMessage.includes("Erro") ||
+                alertMessage.includes("preencha") ||
+                alertMessage.includes("erro") ||
+                alertMessage.includes("não")
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
+            >
+              {alertMessage.includes("Erro") ||
+              alertMessage.includes("preencha") ||
+              alertMessage.includes("erro") ||
+              alertMessage.includes("não")
+                ? "Atenção!"
+                : "Ação concluída!"}
+            </h2>
+
+            <p className="mt-2 text-gray-700">{alertMessage}</p>
+
+            <button
+              onClick={() => {
+                setShowAlert(false);
+                onConfirm();
+              }}
+              className={`mt-4 cursor-pointer px-4 py-2 rounded-lg w-full transition ${
+                alertMessage.includes("Erro") ||
+                alertMessage.includes("preencha") ||
+                alertMessage.includes("erro") ||
+                alertMessage.includes("não")
+                  ? "bg-red-600 hover:bg-red-700 text-white"
+                  : "bg-green-600 hover:bg-green-700 text-white"
+              }`}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

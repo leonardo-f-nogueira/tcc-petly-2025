@@ -20,6 +20,8 @@ export default function RegisterUsuario() {
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
 
+  const [showAlert, setShowAlert] = useState(false);
+
   const handleTipoChange = (novoTipo) => {
     setTipo(novoTipo);
     if (novoTipo === "Adotante") {
@@ -61,8 +63,8 @@ export default function RegisterUsuario() {
         location: "Não informado",
       });
 
-      alert("Cadastro realizado com sucesso! Faça seu login.");
-      navigate("/login/usuario");
+      setShowAlert(true);
+
     } catch (error) {
       console.error("Erro no cadastro:", error);
       if (error.response) {
@@ -94,7 +96,7 @@ export default function RegisterUsuario() {
               type="button"
               onClick={() => handleTipoChange("Adotante")}
               className={`
-                px-6 py-3 border
+                cursor-pointer px-6 py-3 border
                 ${
                   tipo === "Adotante"
                     ? "bg-green-600 text-white border-green-600"
@@ -109,7 +111,7 @@ export default function RegisterUsuario() {
               type="button"
               onClick={() => handleTipoChange("Abrigo")}
               className={`
-                px-6 py-3 border
+                cursor-pointer px-6 py-3 border
                 ${
                   tipo === "Abrigo"
                     ? "bg-green-600 text-white border-green-600"
@@ -250,6 +252,29 @@ export default function RegisterUsuario() {
       </section>
 
       <Footer />
+
+      {showAlert && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white w-[320px] p-6 rounded-xl shadow-xl text-center animate-fade-in">
+            <h2 className="text-xl font-bold text-green-600">
+              Cadastro realizado!
+            </h2>
+            <p className="mt-2 text-gray-700">
+              Estamos felizes em ter você conosco! 
+            </p>
+
+            <button
+              onClick={() => {
+                setShowAlert(false);
+                navigate("/login/usuario");
+              }}
+              className="mt-4 cursor-pointer bg-green-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-700 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

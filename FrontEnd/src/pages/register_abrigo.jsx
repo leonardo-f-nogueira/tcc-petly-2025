@@ -22,6 +22,8 @@ export default function RegisterAbrigo() {
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
 
+  const [showAlert, setShowAlert] = useState(false);
+
   const handleTipoChange = (novoTipo) => {
     setTipo(novoTipo);
     if (novoTipo === "Adotante") {
@@ -63,8 +65,7 @@ export default function RegisterAbrigo() {
         phone: phone,
       });
       
-      alert("Cadastro realizado com sucesso! Aguarde a aprovação da nossa equipe.");
-      navigate("/login/abrigo");
+      setShowAlert(true);
 
     } catch (error) {
       console.error("Erro no cadastro de abrigo:", error);
@@ -97,7 +98,7 @@ export default function RegisterAbrigo() {
               type="button"
               onClick={() => handleTipoChange("Adotante")}
               className={`
-                px-6 py-3 border
+                cursor-pointer px-6 py-3 border
                 ${
                   tipo === "Adotante"
                     ? "bg-green-600 text-white border-green-600"
@@ -112,7 +113,7 @@ export default function RegisterAbrigo() {
               type="button"
               onClick={() => handleTipoChange("Abrigo")}
               className={`
-                px-6 py-3 border
+                cursor-pointer px-6 py-3 border
                 ${
                   tipo === "Abrigo"
                     ? "bg-green-600 text-white border-green-600"
@@ -257,6 +258,30 @@ export default function RegisterAbrigo() {
       </section>
 
       <Footer />
+
+      {showAlert && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white w-[300px] p-6 rounded-xl shadow-xl text-center animate-fade-in">
+            <h2 className="text-xl font-bold text-green-600">
+              Cadastro realizado!
+            </h2>
+            <p className="mt-2 text-gray-700">
+              Aguarde a aprovação da nossa equipe.
+            </p>
+
+            <button
+              onClick={() => {
+                setShowAlert(false);
+                navigate("/login/abrigo");
+              }}
+              className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-700 transition"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+      {/* ---------------------------------------------------- */}
     </main>
   );
 }
